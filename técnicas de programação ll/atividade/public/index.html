@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Leads</title>
+  <style>
+    body {
+      font-family: Arial;
+      margin: 20px;
+    }
+
+    input, select, button {
+      margin: 5px;
+      padding: 5px;
+    }
+
+    .lead {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Cadastro de Leads</h1>
+
+  <input id="nome" placeholder="Nome">
+  <input id="telefone" placeholder="Telefone">
+
+  <select id="origem">
+    <option>WhatsApp</option>
+    <option>Instagram</option>
+    <option>telefone</option>
+    <option>visita presencial</option>
+  </select>
+
+  <input id="veiculo" placeholder="Veículo">
+
+  <button onclick="criarLead()">Criar Lead</button>
+
+  <hr>
+
+  <h2>Leads</h2>
+  <button onclick="listarLeads()">Atualizar Lista</button>
+
+  <div id="lista"></div>
+
+  <script>
+    const API = "http://localhost:3000";
+
+    async function criarLead() {
+      const nome = document.getElementById("nome").value;
+      const telefone = document.getElementById("telefone").value;
+      const origem = document.getElementById("origem").value;
+      const veiculo = document.getElementById("veiculo").value;
+
+      await fetch(`${API}/leads`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ nome, telefone, origem, veiculo })
+      });
+
+      listarLeads();
+    }
+
+    async function listarLeads() {
+      const res = await fetch(`${API}/leads`);
+      const leads = await res.json();
+
+      const div = document.getElementById("lista");
+      div.innerHTML = "";
+
+      leads.forEach(lead => {
+        const el = document.createElement("div");
+        el.className = "lead";
+
+        el.innerHTML = `
+          <b>${lead.nome}</b><br>
+          Tel: ${lead.telefone}<br>
+          Origem: ${lead.origem}<br>
+          Veículo: ${lead.veiculo}<br>
+          Estágio: ${lead.estagio}<br>
+          Status: ${lead.status}<br><br>
+
+          <button onclick="avancar(${lead.id})">Avançar</button>
+          <button onclick="finalizar(${lead.id}, true)">Venda</button>
+          <button onclick="finalizar(${lead.id}, false)">Perda</button>
+        `;
+
+        div.appendChild(el);
+      });
+    }
+
+    async function avancar(id) {
+      await fetch(`${API}/leads/${id}/advance`, {
+        method: "PUT"
+      });
+
+      listarLeads();
+    }
+
+    async function finalizar(id, success) {
+      await fetch(`${API}/leads/${id}/finalize`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ success })
+      });
+
+      listarLeads();
+    }
+  </script>
+
+</body>
+</html>
