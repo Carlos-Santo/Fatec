@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.routes = void 0;
+const express_1 = require("express");
+const listRoutes_1 = require("./listRoutes");
+const queueRoutes_1 = require("./queueRoutes");
+const stackRoutes_1 = require("./stackRoutes");
+const statsRoutes_1 = require("./statsRoutes");
+const routes = (0, express_1.Router)();
+exports.routes = routes;
+routes.use("/pilha", stackRoutes_1.stackRoutes);
+routes.use("/fila", queueRoutes_1.queueRoutes);
+routes.use("/lista", listRoutes_1.listRoutes);
+routes.use("/estatisticas", statsRoutes_1.statsRoutes);

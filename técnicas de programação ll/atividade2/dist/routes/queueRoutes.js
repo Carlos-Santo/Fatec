@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.queueRoutes = void 0;
+const express_1 = require("express");
+const QueueController_1 = require("../controllers/QueueController");
+const queueRoutes = (0, express_1.Router)();
+exports.queueRoutes = queueRoutes;
+const controller = new QueueController_1.QueueController();
+queueRoutes.post("/", (req, res) => controller.add(req, res));
+queueRoutes.delete("/", (req, res) => controller.remove(req, res));
+queueRoutes.get("/frente", (req, res) => controller.peek(req, res));
+queueRoutes.get("/", (req, res) => controller.getAll(req, res));
+queueRoutes.delete("/limpar", (req, res) => controller.clear(req, res));

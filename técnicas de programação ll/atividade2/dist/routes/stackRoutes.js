@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.stackRoutes = void 0;
+const express_1 = require("express");
+const StackController_1 = require("../controllers/StackController");
+const stackRoutes = (0, express_1.Router)();
+exports.stackRoutes = stackRoutes;
+const controller = new StackController_1.StackController();
+stackRoutes.post("/", (req, res) => controller.add(req, res));
+stackRoutes.delete("/", (req, res) => controller.remove(req, res));
+stackRoutes.get("/topo", (req, res) => controller.peek(req, res));
+stackRoutes.get("/", (req, res) => controller.getAll(req, res));
+stackRoutes.delete("/limpar", (req, res) => controller.clear(req, res));

@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.listRoutes = void 0;
+const express_1 = require("express");
+const ListController_1 = require("../controllers/ListController");
+const listRoutes = (0, express_1.Router)();
+exports.listRoutes = listRoutes;
+const controller = new ListController_1.ListController();
+listRoutes.post("/", (req, res) => controller.add(req, res));
+listRoutes.delete("/", (req, res) => controller.remove(req, res));
+listRoutes.get("/ultimo", (req, res) => controller.peek(req, res));
+listRoutes.get("/", (req, res) => controller.getAll(req, res));
+listRoutes.delete("/limpar", (req, res) => controller.clear(req, res));
+listRoutes.get("/:index", (req, res) => controller.getAt(req, res));
+listRoutes.delete("/:index", (req, res) => controller.removeAt(req, res));
